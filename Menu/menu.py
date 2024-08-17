@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from Menu.Tabs.data import Data
-from Menu.Tabs.timers import Timers
+from Menu.Tabs.Timer.timer_controller import TimerController  # Updated import
 
 class Menu:
     def __init__(self, root):
@@ -11,9 +11,9 @@ class Menu:
         # Create a notebook (tabs container)
         self.notebook = ttk.Notebook(self.root)
 
-        # Create instances of Data and Timers
+        # Create instances of Data and TimerController
         self.data_tab = Data(self.notebook)
-        self.timers_tab = Timers(self.notebook)
+        self.timers_tab = TimerController(self.notebook)  # Use TimerController
 
         # Add the frames to the notebook
         self.notebook.add(self.data_tab.frame, text="Data")

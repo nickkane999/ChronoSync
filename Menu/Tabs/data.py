@@ -6,12 +6,9 @@ import os
 class Data:
     def __init__(self, notebook):
         # Create a frame for the Data tab
-        self.frame = ttk.Frame(notebook, width=400, height=300)
-        
         # Determine the path for the JSON file in the parent directory
-        parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        print(parent_dir)
-        self.json_file = os.path.join(parent_dir, "tracked_info.json")
+        self.frame = ttk.Frame(notebook, width=400, height=300)        
+        self.json_file = self.find_base_directory_with_file("tracked_info.json")
 
         # Load the tracked info from the JSON file
         self.tracked_info = self.load_tracked_info()
@@ -69,3 +66,19 @@ class Data:
 
         # Update the status label
         self.status_label.config(text=f"The content for {title} has been saved.")
+
+    def find_base_directory_with_file(self, target_file):
+        current_dir = os.path.abspath(__file__)
+        
+        while True:
+            parent_dir = os.path.dirname(current_dir)
+            
+            if parent_dir == current_dir:  # Reached the root directory
+                raise FileNotFoundError(f"{target_file} not found in any parent directory.")
+            
+            potential_file = os.path.join(parent_dir, target_file)
+            
+            if os.path.isfile(potential_file):
+                return potential_file
+            
+            current_dir = parent_dir
