@@ -2,8 +2,9 @@ import json
 import os
 
 class TimerDataManager:
-    def __init__(self):        
-        self.json_file =  self.find_base_directory_with_file("tracked_info.json")
+    def __init__(self, file_helper):
+        self.file_helper = file_helper
+        self.json_file =  self.file_helper.files["tracked_info.json"]
         self.current_values = {}
 
     def load_current_values(self, key=None):
@@ -32,19 +33,3 @@ class TimerDataManager:
     
     def get_category(self, data, key):
         return data.get(key, {}).get("category", "Uncategorized")
-    
-    def find_base_directory_with_file(self, target_file):
-        current_dir = os.path.abspath(__file__)
-        
-        while True:
-            parent_dir = os.path.dirname(current_dir)
-            
-            if parent_dir == current_dir:  # Reached the root directory
-                raise FileNotFoundError(f"{target_file} not found in any parent directory.")
-            
-            potential_file = os.path.join(parent_dir, target_file)
-            
-            if os.path.isfile(potential_file):
-                return potential_file
-            
-            current_dir = parent_dir

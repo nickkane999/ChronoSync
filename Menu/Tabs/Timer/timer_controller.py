@@ -6,18 +6,17 @@ from Menu.Tabs.Timer.timer_data_manager import TimerDataManager
 from Menu.Tabs.Timer.timer_ui import TimerUI
 
 class TimerController:
-    def __init__(self, notebook):
+    def __init__(self, notebook, file_helper):
         # Create Frame for Timer tab
         # Create TimerDataManager and TimerUI dependent class instances
         # Create dictionary to store timer threads
         self.frame = ttk.Frame(notebook, width=400, height=300)
-        self.data_manager = TimerDataManager()
+        self.data_manager = TimerDataManager(file_helper)
         self.ui = TimerUI(self.frame, self)
         self.timer_threads = {}
 
         # Load current values and create timer sections
         data = self.data_manager.load_current_values()
-        #print(f"Loaded current values: {data}")
         self.ui.create_timer_sections(data)
 
     def format_time(self, minutes):
