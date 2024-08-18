@@ -1,14 +1,14 @@
 {
     "FAPI": {
-        "time": "70",
+        "time": "110",
         "category": "Games"
     },
     "TPB": {
-        "time": "20",
+        "time": "120",
         "category": "Games"
     },
     "AC": {
-        "time": "12",
+        "time": "360",
         "category": "Games"
     }
 }

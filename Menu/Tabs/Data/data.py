@@ -4,19 +4,16 @@ import json
 import os
 
 class Data:
-    def __init__(self, notebook):
+    def __init__(self, notebook, file_helper):
         # Create a frame for the Data tab
+        # Add JSON file to data
         self.frame = ttk.Frame(notebook, width=400, height=300)
-        
-        # Determine the path for the JSON file in the parent directory
-        parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        print(parent_dir)
-        self.json_file = os.path.join(parent_dir, "tracked_info.json")
+        self.file_helper = file_helper
+        self.json_file = self.file_helper.files["tracked_info.json"]
 
         # Load the tracked info from the JSON file
-        self.tracked_info = self.load_tracked_info()
-
         # Create input sections for each item in tracked_info
+        self.tracked_info = self.load_tracked_info()
         for i, title in enumerate(self.tracked_info.keys()):
             self.create_input_section(title, i)
 
