@@ -3,16 +3,23 @@ from tkinter import ttk
 import json
 import os
 import keyboard  # Import the keyboard module for key listening
-from Menu.Scripts.FAPI import Macros as FAPI_Macros
+from Menu.Tabs.Macros.files.FAPI.macros import Macros as FAPI_Macros
+from Menu.Tabs.Macros.files.AC.macros import Macros as AC_Macros
+from Menu.Tabs.Macros.files.Util.macros import Macros as Util_Macros
 
 
 class MacroController:
     def __init__(self, notebook, file_helper):
         self.file_helper = file_helper
         self.frame = ttk.Frame(notebook)
-        self.macros = FAPI_Macros.Macros()  # Initialize FAPI_Macros instance
-
+        
+        self.all_macros = {
+            "FAPI": FAPI_Macros(),
+            "AC": AC_Macros(),
+            "Util": Util_Macros(),
+        }
         # Access tasks directly from the FAPI_Macros instance
+        self.macros = self.all_macros["FAPI"]
         self.tasks = self.macros.tasks
 
         self.files_dir = "Menu/Tabs/Macros/files"
@@ -63,6 +70,11 @@ class MacroController:
             json.dump(self.macro_dict, file, indent=4)
 
     def create_ui(self):
+        # Update tasks to use the currently selected dropdown
+        current_folder = self.get_selected_folder()
+        self.macros = self.all_macros[current_folder]
+        self.tasks = self.macros.tasks
+
         # Clear previous entries
         for widget in self.frame.grid_slaves():
             if int(widget.grid_info()["row"]) > 0:
@@ -124,6 +136,7 @@ class MacroController:
         keyboard.on_press(self.process_key)
 
     def process_key(self, event):
+        #print(self.get_selected_folder())
         if not self.macros_active:
             return  # Do nothing if macros are disabled
 
@@ -134,3 +147,5 @@ class MacroController:
             if command_func:
                 command_func()
 
+    def get_selected_folder(self):
+        return self.folder_var.get()

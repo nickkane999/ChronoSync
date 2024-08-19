@@ -19,7 +19,7 @@ class Macros:
 
     def get_tasks(self):
         tasks = {
-            "maintenance_loop": self.maintenance_loop,
+            "daily_quest": self.complete_daily_quest,
             "get_point": self.get_point,
             "play_wack": self.play_wack,
             "main_loop": self.main_loop,
