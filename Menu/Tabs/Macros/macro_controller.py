@@ -2,28 +2,35 @@ import tkinter as tk
 from tkinter import ttk
 import json
 import os
+import keyboard  # Import the keyboard module for key listening
+from Menu.Tabs.Macros.files.FAPI.macros import Macros as FAPI_Macros
+from Menu.Tabs.Macros.files.AC.macros import Macros as AC_Macros
+from Menu.Tabs.Macros.files.Util.macros import Macros as Util_Macros
+
 
 class MacroController:
     def __init__(self, notebook, file_helper):
         self.file_helper = file_helper
         self.frame = ttk.Frame(notebook)
+        
+        self.all_macros = {
+            "FAPI": FAPI_Macros(),
+            "AC": AC_Macros(),
+            "Util": Util_Macros(),
+        }
+        # Access tasks directly from the FAPI_Macros instance
+        self.macros = self.all_macros["FAPI"]
+        self.tasks = self.macros.tasks
 
         self.files_dir = "Menu/Tabs/Macros/files"
-        self.tasks = {
-            "maintenance_loop": self.maintenance_loop,
-            "get_point": self.get_point,
-            "play_wack": self.play_wack,
-            "main_loop": self.main_loop,
-            "action_check": self.action_check,
-            "check_point": self.check_point,
-            "testing": self.testing,
-        }
-
         self.macro_dict = {}
         self.entries = {}
+        self.macros_active = False  # Initialize the macros as inactive
 
         self.folder_var = tk.StringVar()
         self.create_folder_selector()
+        self.create_toggle_button()
+        self.start_key_listener()  # Start the key listener to handle macros
 
     def create_folder_selector(self):
         # Dropdown for Folder List
@@ -36,7 +43,6 @@ class MacroController:
         folder_menu.grid(row=0, column=1, columnspan=2)
 
     def update_folder_list(self):
-        print(os.listdir())
         self.folders = [f.name for f in os.scandir(self.files_dir) if f.is_dir()]
         if self.folders:
             self.folder_var.set(self.folders[0])
@@ -64,6 +70,11 @@ class MacroController:
             json.dump(self.macro_dict, file, indent=4)
 
     def create_ui(self):
+        # Update tasks to use the currently selected dropdown
+        current_folder = self.get_selected_folder()
+        self.macros = self.all_macros[current_folder]
+        self.tasks = self.macros.tasks
+
         # Clear previous entries
         for widget in self.frame.grid_slaves():
             if int(widget.grid_info()["row"]) > 0:
@@ -96,8 +107,18 @@ class MacroController:
         self.status_label = tk.Label(self.frame, text="")
         self.status_label.grid(row=row + 1, column=0, columnspan=4)
 
-        # Bind key press event
-        self.frame.bind('<Key>', self.execute_macro)
+    def create_toggle_button(self):
+        # Toggle button for enabling/disabling macros
+        self.toggle_button = tk.Button(self.frame, text="Enable Macros", command=self.toggle_macros)
+        self.toggle_button.grid(row=0, column=4)
+
+    def toggle_macros(self):
+        # Toggle the macro active state
+        self.macros_active = not self.macros_active
+        button_text = "Disable Macros" if self.macros_active else "Enable Macros"
+        self.toggle_button.config(text=button_text)
+        status = "active" if self.macros_active else "inactive"
+        self.status_label.config(text=f"Macros are now {status}.")
 
     def update_macros(self):
         new_macro_dict = {}
@@ -110,31 +131,21 @@ class MacroController:
         self.save_macros()
         self.status_label.config(text="Macros updated!")
 
-    def execute_macro(self, event):
-        key = event.keysym
+    def start_key_listener(self):
+        # Start listening for key events
+        keyboard.on_press(self.process_key)
+
+    def process_key(self, event):
+        #print(self.get_selected_folder())
+        if not self.macros_active:
+            return  # Do nothing if macros are disabled
+
+        key = event.name
         if key in self.macro_dict:
             command_name = self.macro_dict[key]
-            command_func = self.tasks[command_name]
-            command_func()
+            command_func = self.tasks.get(command_name)
+            if command_func:
+                command_func()
 
-    # Example task functions
-    def maintenance_loop(self):
-        print("Running maintenance_loop")
-
-    def get_point(self):
-        print("Running get_point")
-
-    def play_wack(self):
-        print("Running play_wack")
-
-    def main_loop(self):
-        print("Running main_loop")
-
-    def action_check(self):
-        print("Running action_check")
-
-    def check_point(self):
-        print("Running check_point")
-
-    def testing(self):
-        print("Running testing")
+    def get_selected_folder(self):
+        return self.folder_var.get()
