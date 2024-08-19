@@ -1,0 +1,4 @@
+{
+  ">": "gc_speed_up",
+  "<": "gc_slow_down"
+}
