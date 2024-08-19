@@ -5,7 +5,10 @@ import os
 import keyboard  # Import the keyboard module for key listening
 from Menu.Tabs.Macros.files.FAPI.macros import Macros as FAPI_Macros
 from Menu.Tabs.Macros.files.AC.macros import Macros as AC_Macros
+from Menu.Tabs.Macros.files.Gemcraft.macros import Macros as Gemcraft_Macros
 from Menu.Tabs.Macros.files.Util.macros import Macros as Util_Macros
+from Menu.Tabs.Macros.files.Gamecube_Emulator.macros import Macros as Gamecube_Emulator_Macros
+from Menu.Tabs.Macros.files.N64_Emulator.macros import Macros as N64_Emulator_Macros
 
 
 class MacroController:
@@ -16,7 +19,10 @@ class MacroController:
         self.all_macros = {
             "FAPI": FAPI_Macros(),
             "AC": AC_Macros(),
+            "Gemcraft": Gemcraft_Macros(),
             "Util": Util_Macros(),
+            "Gamecube_Emulator": Gamecube_Emulator_Macros(),
+            "N64_Emulator": N64_Emulator_Macros(),
         }
         # Access tasks directly from the FAPI_Macros instance
         self.macros = self.all_macros["FAPI"]

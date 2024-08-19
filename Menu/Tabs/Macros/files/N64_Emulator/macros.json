@@ -1,0 +1,7 @@
+{
+  ">": "n64_speed_up",
+  "<": "n64_slow_down",
+  "?": "n64_button_mash_a",
+  "\"": "n64_button_mash_ab",
+  ":": "n64_button_mash_left"
+}
