@@ -1,0 +1,9 @@
+{
+  "?": "increase_mana_pool",
+  ">": "upgrade_gems",
+  "<": "duplicate_gems",
+  "\"": "send_5_gems",
+  ":": "send_gem_inventory",
+  "@": "gem_upgrade_exploit",
+  "#": "gem_upgrade_exploit_small"
+}

@@ -1,11 +1,5 @@
 {
-    "a": "tbd",
-    "b": "get_point",
-    "\"": "maintenance_loop",
-    "?": "get_point",
-    ">": "play_wack",
-    "~": "main_loop",
-    "!": "action_check",
-    "@": "check_point",
-    "#": "testing"
+  "\"": "maintenance_loop",
+  ">": "play_wack",
+  "~": "main_loop"
 }
