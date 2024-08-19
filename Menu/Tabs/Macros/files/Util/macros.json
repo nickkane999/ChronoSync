@@ -1,5 +1,6 @@
 {
   "?": "get_point",
   ">": "check_point",
-  "<": "testing"
+  "<": "click_loop",
+  ":": "testing"
 }

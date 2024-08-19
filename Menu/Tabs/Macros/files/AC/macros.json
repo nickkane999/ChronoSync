@@ -1,4 +1,4 @@
 {
-  "a": "tbd",
-  "b": "get_point"
+  "?": "collect_research",
+  ">": "do_daily_quest"
 }

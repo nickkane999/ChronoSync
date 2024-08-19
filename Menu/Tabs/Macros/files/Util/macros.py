@@ -1,5 +1,6 @@
 import pyautogui
 import time
+import keyboard
 
 class Macros:
     def __init__(self):
@@ -11,9 +12,10 @@ class Macros:
             "get_point": self.get_point,
             "check_point": self.check_point,
             "testing": self.testing,
+            "click_loop": self.click_loop,  # Add the click_loop task here
         }
         return tasks
-    
+
     def get_info(self):
         info = {
             "send_10_gems": (0, 0),
@@ -23,8 +25,7 @@ class Macros:
 
     def get_point(self):
         x = 0
-        while x < 100:
-            time.sleep(1)
+        while x < 1:
             print(pyautogui.position())
             x += 1
 
@@ -35,3 +36,12 @@ class Macros:
 
     def testing(self):
         print("Testing")
+
+    def click_loop(self):
+        print("Starting click loop. Press F1 to stop.")
+        time.sleep(0.3)
+        while True:
+            pyautogui.click()
+            if keyboard.is_pressed('F1'):
+                print("Stopping click loop.")
+                break
